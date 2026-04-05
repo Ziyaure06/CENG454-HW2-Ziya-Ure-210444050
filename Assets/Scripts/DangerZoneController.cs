@@ -1,21 +1,21 @@
 using UnityEngine;
-using System.Collections; 
+using System.Collections;
 
 public class DangerZoneController : MonoBehaviour
 {
     [SerializeField] private FlightExamManager examManager;
+    [SerializeField] private MissileLauncher missileLauncher; 
     [SerializeField] private float missileDelay = 5f;
 
     private Coroutine activeCountdown;
+    private Transform playerTransform; 
 
-    
     private void OnTriggerEnter(Collider collision)
     {
-        
         if (collision.CompareTag("Player"))
         {
+            playerTransform = collision.transform; 
             examManager.EnterDangerZone();
-            
             activeCountdown = StartCoroutine(MissileCountdownRoutine());
         }
     }
@@ -26,22 +26,32 @@ public class DangerZoneController : MonoBehaviour
         {
             examManager.ExitDangerZone();
 
-            
             if (activeCountdown != null)
             {
                 StopCoroutine(activeCountdown);
                 activeCountdown = null;
-                Debug.Log("Tehlike geçiþtirildi: 5 saniyelik füze sayacý ÝPTAL EDÝLDÝ!");
+            }
+
+            
+            if (missileLauncher != null)
+            {
+                missileLauncher.DestroyActiveMissile();
             }
         }
     }
 
-   
     private IEnumerator MissileCountdownRoutine()
     {
-        Debug.Log("Füze fýrlatma sayacý baþladý: 5 saniye bekleniyor...");
         yield return new WaitForSeconds(missileDelay);
 
-        Debug.Log(" 5 Saniye doldu, füze ateþlenmeli!");
+      
+        if (missileLauncher != null && playerTransform != null)
+        {
+            missileLauncher.Launch(playerTransform);
+        }
+        else
+        {
+            Debug.LogWarning("HATA: Fýrlatýcý (Missile Launcher) slota eklenmemiþ!");
+        }
     }
 }
