@@ -10,8 +10,11 @@ public class AircraftThreatHandler : MonoBehaviour
        
         if (collision.CompareTag("Missile"))
         {
-            Debug.Log("GÖREV BAÞARISIZ: Füze Uçaða Çarptý!");
-
+            if (examManager != null)
+            {
+                examManager.ShowMissionFailed();
+            }
+            
             // Füzeyi patlat
             Destroy(collision.gameObject);
 
