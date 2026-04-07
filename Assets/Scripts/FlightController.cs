@@ -14,6 +14,19 @@ public class FlightController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+
+        if (engineAudioSource != null)
+        {
+            engineAudioSource.Play();
+        }
+    }
+
+    public void StopEngine()
+    {
+        if (engineAudioSource != null)
+        {
+            engineAudioSource.Stop();
+        }
     }
 
     void Update()

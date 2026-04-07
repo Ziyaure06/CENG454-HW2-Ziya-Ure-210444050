@@ -18,6 +18,13 @@ public class LandingZoneController : MonoBehaviour
                 {
                     landingAudioSource.PlayOneShot(successClip);
                 }
+
+                FlightController controller = collision.GetComponent<FlightController>();
+                if (controller != null)
+                {
+                    controller.StopEngine();
+                    controller.enabled = false;
+                }
             }
         }
     }
