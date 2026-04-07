@@ -5,6 +5,10 @@ using System.Collections;
 public class FlightExamManager : MonoBehaviour
 {
     [SerializeField] private TMP_Text warningText;
+    [SerializeField] private AudioSource uiAudioSource;
+    [SerializeField] private AudioClip dangerZoneClip;
+    [SerializeField] private AudioClip clearZoneClip;
+    [SerializeField] private AudioClip missionFailedClip;
 
     public bool isPlayerInDangerZone = false;
     public bool threatCleared = false;
@@ -24,6 +28,10 @@ public class FlightExamManager : MonoBehaviour
         if (warningText != null)
         {
             warningText.color = Color.red;
+        }
+        if (uiAudioSource != null && dangerZoneClip != null)
+        {
+            uiAudioSource.PlayOneShot(dangerZoneClip);
         }
     }
 
@@ -54,6 +62,10 @@ public class FlightExamManager : MonoBehaviour
             warningText.color = Color.green;
             StartCoroutine(ClearTextDelay());
         }
+        if (uiAudioSource != null && clearZoneClip != null)
+        {
+            uiAudioSource.PlayOneShot(clearZoneClip);
+        }
     }
 
     public void ShowMissionFailed()
@@ -64,12 +76,26 @@ public class FlightExamManager : MonoBehaviour
             warningText.text = "GÖREV BAÞARISIZ: Vuruldun!";
             warningText.color = Color.red;
         }
+        if (uiAudioSource != null && missionFailedClip != null)
+        {
+            uiAudioSource.PlayOneShot(missionFailedClip);
+        }
+    }
+
+    public void ShowMissionComplete()
+    {
+        missionComplete = true;
+        if (warningText != null)
+        {
+            warningText.text = "Mission Completed!";
+            warningText.color = Color.blue;
+        }
     }
 
     private IEnumerator ClearTextDelay()
     {
         yield return new WaitForSeconds(3f);
-        if (!isPlayerInDangerZone && warningText != null)
+        if (!isPlayerInDangerZone && warningText != null && !missionComplete)
         {
             warningText.text = "";
         }
