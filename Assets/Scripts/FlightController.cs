@@ -6,6 +6,7 @@ public class FlightController : MonoBehaviour
     [SerializeField] private float yawSpeed = 45f;
     [SerializeField] private float rollSpeed = 45f;
     [SerializeField] private float thrustSpeed = 5f;
+    [SerializeField] private AudioSource engineAudioSource;
 
     private Rigidbody rb;
 
